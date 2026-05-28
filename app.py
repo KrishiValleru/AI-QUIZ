@@ -1,33 +1,34 @@
 import streamlit as st
 from file_parser import extract_text
-from embeddings import create_embedding
-from utils import store_embedding
 from quiz_generator import generate_mcqs
 import os
+
+st.set_page_config(page_title="AI Quiz Generator")
 
 st.title("AI Quiz Generator")
 
 uploaded_file = st.file_uploader(
-    "Upload a file",
+    "Upload a PDF, DOCX, or TXT file",
     type=["pdf", "docx", "txt"]
 )
 
 if uploaded_file:
 
+    # Create uploads folder if not exists
+    os.makedirs("uploads", exist_ok=True)
+
     file_path = os.path.join("uploads", uploaded_file.name)
 
+    # Save uploaded file
     with open(file_path, "wb") as f:
         f.write(uploaded_file.getbuffer())
 
     st.success("File uploaded successfully!")
 
+    # Extract text
     text = extract_text(file_path)
 
-    embedding = create_embedding(text)
-
-    store_embedding(text, embedding)
-
-    st.success("Embeddings stored successfully!")
+    st.success("Text extracted successfully!")
 
     # Generate quiz only once
     if "quiz_data" not in st.session_state:
@@ -71,10 +72,10 @@ if uploaded_file:
 
         st.subheader("Result")
 
-        st.write(f" Correct Answers: {score}")
+        st.write(f"✅ Correct Answers: {score}")
 
-        st.write(f"Wrong Answers: {len(quiz_data) - score}")
+        st.write(f"❌ Wrong Answers: {len(quiz_data) - score}")
 
         percentage = (score / len(quiz_data)) * 100
 
-        st.write(f" Final Score: {percentage:.2f}%")
+        st.write(f"🎯 Final Score: {percentage:.2f}%")
