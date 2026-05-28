@@ -72,10 +72,10 @@ if uploaded_file:
 
         st.subheader("Result")
 
-        st.write(f"✅ Correct Answers: {score}")
+        st.write(f" Correct Answers: {score}")
 
-        st.write(f"❌ Wrong Answers: {len(quiz_data) - score}")
+        st.write(f" Wrong Answers: {len(quiz_data) - score}")
 
         percentage = (score / len(quiz_data)) * 100
 
-        st.write(f"🎯 Final Score: {percentage:.2f}%")
+        st.write(f" Final Score: {percentage:.2f}%")
